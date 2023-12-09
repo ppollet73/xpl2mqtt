@@ -24,7 +24,7 @@ Use the provided docker image: `ghcr.io/droso-hass/xpl2mqtt`.
 
 To manually build the docker image, follow the "build from source" steps above, and run `docker build . -t xpl2mqtt`.
 
-Run it: `docker run -it --rm -p 3865:3865/udp -e X2M_MQTT_BROKER="ssl://mqtt.domain.tld:8883" -e X2M_BROADCAST_ADDRESS="192.168.1.45:3865" xpl2mqtt`
+Run it: `docker run -it --rm -p 3865:3865/udp -e X2M_MQTT_BROKER="ssl://mqtt.domain.tld:8883" -e X2M_BROADCAST_ADDRESS="192.168.1.45:3865" ghcr.io/droso-hass/xpl2mqtt`
 
 ## Configuration
 

@@ -26,9 +26,9 @@ archives:
 
 dockers:
   - image_templates:
-      - "droso-hass/xpl2mqtt:latest"
-      - "droso-hass/xpl2mqtt:{{ .Tag }}"
-      - "droso-hass/xpl2mqtt:v{{ .Major }}"
+      - "ghcr.io/droso-hass/xpl2mqtt:latest"
+      - "ghcr.io/droso-hass/xpl2mqtt:{{ .Tag }}"
+      - "ghcr.io/droso-hass/xpl2mqtt:v{{ .Major }}"
 
 checksum:
   name_template: 'checksums.txt'
