@@ -2,7 +2,6 @@ package main
 
 import (
 	"crypto/tls"
-	"fmt"
 	"log"
 	"log/slog"
 
@@ -24,13 +23,10 @@ func main() {
 	opts.SetPassword(cmd.ConfigData.MqttPassword)
 	opts.SetTLSConfig(&tls.Config{InsecureSkipVerify: cmd.ConfigData.MqttVerifySSL})
 
-	fmt.Printf("%v\n", cmd.ConfigData)
-
 	client := mqtt.NewClient(opts)
 	srv := xpl.NewServer(xpl.XPLPort, &client)
 
-	mqttCmd := client.Subscribe(cmd.ConfigData.MqttBaseTopic+"/#", 0, func(c mqtt.Client, m mqtt.Message) { xpl.ProcessMqtt(c, m, srv) })
-	err := utils.MqttError(mqttCmd)
+	err := utils.MqttError(client.Connect())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,7 +39,8 @@ func main() {
 		}
 	}
 
-	err = utils.MqttError(client.Connect())
+	mqttCmd := client.Subscribe(cmd.ConfigData.MqttBaseTopic+"/#", 0, func(c mqtt.Client, m mqtt.Message) { xpl.ProcessMqtt(c, m, srv) })
+	err = utils.MqttError(mqttCmd)
 	if err != nil {
 		log.Fatal(err)
 	}

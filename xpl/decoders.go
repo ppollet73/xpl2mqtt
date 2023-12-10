@@ -132,7 +132,7 @@ func decodeAC(pkt *XPLPacket, c *mqtt.Client) {
 		CommandTopic: topic.StringO(Topic{Action: "set"}),
 		StateTopic:   topic.String(),
 		Device: HADevice{
-			Identifiers: []string{addr, unit},
+			Identifiers: []string{addr + unit},
 			Name:        addr,
 			Model:       pkt.MessageType,
 		},
@@ -181,7 +181,7 @@ func decodeX10Sec(pkt *XPLPacket, c *mqtt.Client) {
 		Action:      "state",
 	}
 	device := HADevice{
-		Identifiers: []string{dev, tp},
+		Identifiers: []string{dev + tp},
 		Name:        dev + " " + tp,
 		Model:       pkt.MessageType,
 	}
@@ -304,7 +304,7 @@ func decodeSensor(pkt *XPLPacket, c *mqtt.Client) {
 	}
 	cfg := HAConfig{
 		Device: HADevice{
-			Identifiers: []string{tp, dev},
+			Identifiers: []string{tp + dev},
 			Name:        dev + " " + tp,
 			Model:       pkt.MessageType,
 		},
