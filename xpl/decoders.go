@@ -149,7 +149,7 @@ func decodeAC(pkt *XPLPacket, c *mqtt.Client) {
 			Name:        addr,
 			Model:       pkt.MessageType,
 		},
-		UniqueID: "x2m" + pkt.MessageType + addr,
+		UniqueID: "x2m" + pkt.MessageType + addr + unit + topic.DeviceParam,
 	}
 
 	if command == "preset" {
