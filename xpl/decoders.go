@@ -1,14 +1,11 @@
 package xpl
 
 import (
-	"encoding/json"
-	"fmt"
 	"log/slog"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/droso-hass/xpl2mqtt/cmd"
 	"github.com/droso-hass/xpl2mqtt/utils"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -32,19 +29,9 @@ var x10secCmdToState = map[string]string{
 }
 
 func sendMqttPacket(client *mqtt.Client, topic string, data string) {
-	x := (*client).Publish(topic, 0, false, data)
+	x := (*client).Publish(topic, 1, false, data)
 	slog.Debug("sending mqtt packet", "topic", topic, "message", data)
 	go utils.MqttError(x)
-}
-
-func sendHassPacket(client *mqtt.Client, deviceType string, deviceId string, data HAConfig) {
-	if cmd.ConfigData.HassDiscovery {
-		data.Device.Manifacturer = "xpl2mqtt"
-		sdata, err := json.Marshal(data)
-		if err == nil {
-			(*client).Publish(fmt.Sprintf("homeassistant/%s/xpl2mqtt/%s/config", deviceType, deviceId), 0, false, string(sdata))
-		}
-	}
 }
 
 func ProcessXPL(pkt *XPLPacket, mqtt *mqtt.Client) {

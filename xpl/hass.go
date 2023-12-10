@@ -1,5 +1,16 @@
 package xpl
 
+import (
+	"encoding/json"
+	"fmt"
+	"slices"
+
+	"github.com/droso-hass/xpl2mqtt/cmd"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
+)
+
+var HADiscovery = make(map[string][]string)
+
 type HAConfig struct {
 	Name                   string   `json:"name,omitempty"`
 	UniqueID               string   `json:"unique_id,omitempty"`
@@ -23,4 +34,30 @@ type HADevice struct {
 	Manifacturer string   `json:"manufacturer"`
 	Name         string   `json:"name"`
 	Model        string   `json:"model"`
+}
+
+func sendHassPacket(client *mqtt.Client, deviceType string, deviceId string, data HAConfig) {
+	if !cmd.ConfigData.HassDiscovery {
+		return
+	}
+	data.Device.Manifacturer = "xpl2mqtt"
+	sdata, err := json.Marshal(data)
+	if err != nil {
+		return
+	}
+	t := fmt.Sprintf("homeassistant/%s/xpl2mqtt/%s/config", deviceType, deviceId)
+	p := string(sdata)
+
+	if _, ok := HADiscovery[t]; !ok || (ok && !slices.Contains(HADiscovery[t], p)) {
+		HADiscovery[t] = append(HADiscovery[t], p)
+		(*client).Publish(t, 1, true, p)
+	}
+}
+
+func ProcessMqttDiscovery(c mqtt.Client, m mqtt.Message) {
+	t := m.Topic()
+	p := string(m.Payload())
+	if _, ok := HADiscovery[t]; !ok || (ok && !slices.Contains(HADiscovery[t], p)) {
+		HADiscovery[t] = append(HADiscovery[t], p)
+	}
 }

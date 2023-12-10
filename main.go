@@ -29,12 +29,21 @@ func main() {
 	client := mqtt.NewClient(opts)
 	srv := xpl.NewServer(xpl.XPLPort, &client)
 
-	err := utils.MqttError(client.Connect())
+	mqttCmd := client.Subscribe(cmd.ConfigData.MqttBaseTopic+"/#", 0, func(c mqtt.Client, m mqtt.Message) { xpl.ProcessMqtt(c, m, srv) })
+	err := utils.MqttError(mqttCmd)
 	if err != nil {
 		log.Fatal(err)
 	}
-	x := client.Subscribe(cmd.ConfigData.MqttBaseTopic+"/#", 0, func(c mqtt.Client, m mqtt.Message) { xpl.ProcessMqtt(c, m, srv) })
-	err = utils.MqttError(x)
+
+	if cmd.ConfigData.HassDiscovery {
+		mqttDisc := client.Subscribe("homeassistant/+/xpl2mqtt/+/config", 0, xpl.ProcessMqttDiscovery)
+		err = utils.MqttError(mqttDisc)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	err = utils.MqttError(client.Connect())
 	if err != nil {
 		log.Fatal(err)
 	}
