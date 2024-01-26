@@ -308,7 +308,8 @@ func decodeSensor(pkt *XPLPacket, c *mqtt.Client) {
 			Name:        dev + " " + tp,
 			Model:       pkt.MessageType,
 		},
-		UniqueID: "x2m" + pkt.MessageType + dev + tp + param,
+		UniqueID:   "x2m" + pkt.MessageType + dev + tp + param,
+		StateTopic: topic.String(),
 	}
 
 	value, ok := pkt.Data["current"]
