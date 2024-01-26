@@ -286,8 +286,8 @@ func decodeSensor(pkt *XPLPacket, c *mqtt.Client) {
 	tp := "unknown"
 	s := strings.Split(dev, " ")
 	if len(s) == 2 {
-		dev = s[0]
-		tp = s[1]
+		tp = s[0]
+		dev = s[1]
 	}
 
 	param, ok := pkt.Data["type"]
