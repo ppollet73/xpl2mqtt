@@ -31,7 +31,7 @@ type HAConfig struct {
 
 type HADevice struct {
 	Identifiers  []string `json:"identifiers,omitempty"`
-	Manifacturer string   `json:"manufacturer"`
+	Manufacturer string   `json:"manufacturer"`
 	Name         string   `json:"name"`
 	Model        string   `json:"model"`
 }
@@ -40,12 +40,12 @@ func sendHassPacket(client *mqtt.Client, deviceType string, deviceId string, dat
 	if !cmd.ConfigData.HassDiscovery {
 		return
 	}
-	data.Device.Manifacturer = "xpl2mqtt"
+	data.Device.Manufacturer = "xpl2mqtt"
 	sdata, err := json.Marshal(data)
 	if err != nil {
 		return
 	}
-	t := fmt.Sprintf("homeassistant/%s/xpl2mqtt/%s/config", deviceType, deviceId)
+	t := fmt.Sprintf("homeassistant/%s/%s/config", deviceType, deviceId)
 	p := string(sdata)
 
 	if _, ok := HADiscovery[t]; !ok || (ok && !slices.Contains(HADiscovery[t], p)) {
