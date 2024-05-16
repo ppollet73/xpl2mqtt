@@ -13,6 +13,7 @@ import (
 var decoders = map[string](func(pkt *XPLPacket, mqtt *mqtt.Client)){
 	"log.basic":    decodeLogs,
 	"hbeat.basic":  decodeHbeat,
+	"hbeat.app":    decodeHbeat,
 	"x10.basic":    decodeX10,
 	"ac.basic":     decodeAC,
 	"x10.security": decodeX10Sec,
