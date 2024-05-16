@@ -321,7 +321,7 @@ func decodeSensor(pkt *XPLPacket, c *mqtt.Client) {
 	case "temp", "setpoint":
 		cfg.Unit = "°C"
 		cfg.DeviceClass = "temperature"
-		sendHassPacket(c, "sensor", dev, cfg)
+		sendHassPacket(c, "sensor", dev + "/temperature", cfg)
 		sendMqttPacket(c, topic.String(), value)
 	case "voltage":
 		cfg.Unit = "V"
@@ -338,7 +338,7 @@ func decodeSensor(pkt *XPLPacket, c *mqtt.Client) {
 	case "humidity":
 		cfg.Unit = "%"
 		cfg.DeviceClass = "humidity"
-		sendHassPacket(c, "sensor", dev, cfg)
+		sendHassPacket(c, "sensor", dev + "/humidity", cfg)
 		sendMqttPacket(c, topic.String(), value)
 	case "status":
 		cfg.DeviceClass = "enum"
@@ -371,7 +371,7 @@ func decodeSensor(pkt *XPLPacket, c *mqtt.Client) {
 	case "battery":
 		cfg.Unit = "%"
 		cfg.DeviceClass = "battery"
-		sendHassPacket(c, "sensor", dev, cfg)
+		sendHassPacket(c, "sensor", dev + "/battery", cfg)
 		sendMqttPacket(c, topic.String(), value)
 	case "weight":
 		cfg.Unit = "kg"
